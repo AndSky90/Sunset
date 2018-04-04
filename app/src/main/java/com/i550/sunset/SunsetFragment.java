@@ -1,5 +1,6 @@
 package com.i550.sunset;
 
+import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
@@ -48,7 +49,17 @@ public class SunsetFragment extends Fragment {
         heightAnimator.setInterpolator(new AccelerateInterpolator());   //ускорение в начале
         ObjectAnimator sunsetSkyAnimator = ObjectAnimator.ofInt(mSkyView,"backgroundColor", mBlueSkyColor, mSunsetSkyColor).setDuration(3000);
         sunsetSkyAnimator.setEvaluator(new ArgbEvaluator());        //чтобы цвета в Интегере плавно менялисьЫ
-        heightAnimator.start();
-        sunsetSkyAnimator.start();
+        ObjectAnimator nightSkyAnimator = ObjectAnimator.ofInt(mSkyView, "backgroundColor",mSunsetSkyColor,mNightSkyColor).setDuration(1500);
+        nightSkyAnimator.setEvaluator(new ArgbEvaluator());
+
+        AnimatorSet animatorSet =new AnimatorSet();     //набор анимаций
+        animatorSet
+                .play(heightAnimator)
+                .with(sunsetSkyAnimator)
+                .before(nightSkyAnimator);
+        animatorSet.start();
+
+/*        heightAnimator.start();
+        sunsetSkyAnimator.start();*/
     }
 }
